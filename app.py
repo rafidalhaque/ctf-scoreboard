@@ -20,6 +20,23 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Security headers
+@app.after_request
+def add_security_headers(response):
+    """Add security headers to all responses"""
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; "
+        "font-src 'self' https://cdnjs.cloudflare.com; "
+        "img-src 'self' data:;"
+    )
+    return response
+
 # Global variables
 db = None
 ctfd_client = None
@@ -122,6 +139,20 @@ def init_scheduler():
 
 if __name__ == '__main__':
     try:
+        # Check for deprecated gotrue package
+        try:
+            import importlib.util
+            if importlib.util.find_spec("gotrue") is not None:
+                logger.warning("=" * 60)
+                logger.warning("DEPRECATED PACKAGE DETECTED!")
+                logger.warning("The 'gotrue' package is installed but deprecated.")
+                logger.warning("This may cause 'proxy' errors with Supabase.")
+                logger.warning("Please run: pip uninstall gotrue -y")
+                logger.warning("Or use the cleanup script: ./cleanup_deps.sh")
+                logger.warning("=" * 60)
+        except Exception:
+            pass  # Ignore if we can't check
+        
         # Validate configuration
         Config.validate()
         

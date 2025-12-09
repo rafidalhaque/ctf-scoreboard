@@ -250,6 +250,25 @@ ctf-scoreboard/
 - Test API connection: `curl -H "Authorization: Token YOUR_KEY" YOUR_CTFD_URL/api/v1/scoreboard`
 - Check if there's data in your Supabase table
 
+### Upgrade Issues (Supabase Client Error)
+
+**Problem**: Error: `Client.__init__() got an unexpected keyword argument 'proxy'`
+
+**Solution**: This occurs when upgrading from an older version that had the deprecated `gotrue` package installed.
+
+Run the cleanup script to fix:
+```bash
+./cleanup_deps.sh
+```
+
+Or manually:
+```bash
+pip uninstall gotrue -y
+pip install -r requirements.txt --upgrade
+```
+
+See [UPGRADE.md](UPGRADE.md) for detailed upgrade instructions.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
