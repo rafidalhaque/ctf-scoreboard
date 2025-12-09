@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Error - CTF Scoreboard{% endblock %}
+
+{% block content %}
+<div class="hero min-h-[60vh]">
+    <div class="hero-content text-center">
+        <div class="max-w-md">
+            <i class="fas fa-exclamation-triangle text-8xl text-error mb-4"></i>
+            <h1 class="text-5xl font-bold">Oops!</h1>
+            <p class="py-6 text-lg">
+                Something went wrong while loading the scoreboard.
+            </p>
+            {% if error %}
+            <div class="alert alert-error">
+                <i class="fas fa-bug"></i>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+            <div class="mt-6">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home mr-2"></i>
+                    Go Back Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

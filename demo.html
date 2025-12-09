@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Scoreboard - Demo</title>
+    
+    <!-- Tailwind CSS and DaisyUI from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .trophy-gold { color: #FFD700; }
+        .trophy-silver { color: #C0C0C0; }
+        .trophy-bronze { color: #CD7F32; }
+        
+        /* Smooth transitions */
+        .score-item {
+            transition: all 0.3s ease;
+        }
+        
+        .score-item:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <!-- Navbar -->
+    <div class="navbar bg-base-100 shadow-lg sticky top-0 z-50">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl">
+                <i class="fas fa-trophy text-primary"></i>
+                <span class="ml-2">CTF Championship 2024</span>
+            </a>
+        </div>
+        <div class="flex-none">
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/health"><i class="fas fa-heart-pulse"></i> Health</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="fade-in">
+            <!-- Header Section -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">
+                    <i class="fas fa-trophy"></i> CTF Championship 2024
+                </h1>
+                <p class="text-lg text-base-content/70">
+                    Live Scoreboard
+                </p>
+                <div class="badge badge-info mt-2">
+                    <i class="fas fa-clock mr-1"></i>
+                    Last updated: 2024-12-09 07:30:00
+                </div>
+            </div>
+
+            <!-- Auto-refresh indicator -->
+            <div class="alert alert-info shadow-lg mb-6">
+                <i class="fas fa-sync-alt"></i>
+                <span>Scoreboard auto-refreshes every 60 seconds</span>
+            </div>
+
+            <!-- Scoreboard Table -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body p-0">
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <!-- Head -->
+                            <thead class="bg-primary text-primary-content">
+                                <tr>
+                                    <th class="text-center w-20">Rank</th>
+                                    <th>Team</th>
+                                    <th class="text-right">Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- First Place -->
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <div class="flex items-center justify-center">
+                                            <i class="fas fa-trophy trophy-gold text-2xl"></i>
+                                            <span class="ml-2 text-xl">1</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">C</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">CyberHawks</div>
+                                                <div class="text-sm opacity-50">Team ID: 101</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            4850 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Second Place -->
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <div class="flex items-center justify-center">
+                                            <i class="fas fa-trophy trophy-silver text-2xl"></i>
+                                            <span class="ml-2 text-lg">2</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">H</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">HackMasters</div>
+                                                <div class="text-sm opacity-50">Team ID: 102</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            4620 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Third Place -->
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <div class="flex items-center justify-center">
+                                            <i class="fas fa-trophy trophy-bronze text-2xl"></i>
+                                            <span class="ml-2 text-lg">3</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">S</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">SecureSquad</div>
+                                                <div class="text-sm opacity-50">Team ID: 103</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            4100 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Other teams -->
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <span class="text-lg">4</span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">B</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">ByteBandits</div>
+                                                <div class="text-sm opacity-50">Team ID: 104</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            3850 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <span class="text-lg">5</span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">N</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">NullPointers</div>
+                                                <div class="text-sm opacity-50">Team ID: 105</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            3500 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <span class="text-lg">6</span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">R</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">RootRunners</div>
+                                                <div class="text-sm opacity-50">Team ID: 106</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            3200 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <span class="text-lg">7</span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">D</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">DataBreakers</div>
+                                                <div class="text-sm opacity-50">Team ID: 107</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            2900 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <span class="text-lg">8</span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">P</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">PixelPwners</div>
+                                                <div class="text-sm opacity-50">Team ID: 108</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            2650 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <span class="text-lg">9</span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">Q</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">QuantumCrack</div>
+                                                <div class="text-sm opacity-50">Team ID: 109</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            2400 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="score-item hover:bg-base-200">
+                                    <td class="text-center font-bold">
+                                        <span class="text-lg">10</span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                    <span class="text-xl">E</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-lg">ExploitExperts</div>
+                                                <div class="text-sm opacity-50">Team ID: 110</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="badge badge-lg badge-primary">
+                                            <i class="fas fa-star mr-1"></i>
+                                            2100 pts
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                <div class="stats shadow bg-base-100">
+                    <div class="stat">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-users text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Total Teams</div>
+                        <div class="stat-value text-primary">10</div>
+                    </div>
+                </div>
+                
+                <div class="stats shadow bg-base-100">
+                    <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <i class="fas fa-sync text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Refresh Rate</div>
+                        <div class="stat-value text-secondary">60s</div>
+                    </div>
+                </div>
+                
+                <div class="stats shadow bg-base-100">
+                    <div class="stat">
+                        <div class="stat-figure text-accent">
+                            <i class="fas fa-crown text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Leader</div>
+                        <div class="stat-value text-accent">CyberHawks</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-10 bg-base-100 text-base-content mt-12">
+        <aside>
+            <i class="fas fa-flag-checkered text-4xl text-primary"></i>
+            <p class="font-bold">
+                CTF Scoreboard
+            </p> 
+            <p>Real-time CTF competition standings</p>
+        </aside>
+    </footer>
+</body>
+</html>
