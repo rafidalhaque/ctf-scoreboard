@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
     # Ensure deprecated gotrue is not installed
-    pip uninstall gotrue -y 2>/dev/null || true
+    (pip show gotrue && pip uninstall gotrue -y) || echo "gotrue not installed (correct)"
 
 # Copy application files
 COPY . .

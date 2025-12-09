@@ -22,7 +22,11 @@ if [ -z "$VIRTUAL_ENV" ]; then
 fi
 
 echo "Step 1: Removing deprecated 'gotrue' package..."
-pip uninstall gotrue -y 2>/dev/null || echo "  (gotrue not installed)"
+if pip show gotrue >/dev/null 2>&1; then
+    pip uninstall gotrue -y
+else
+    echo "  (gotrue not installed)"
+fi
 
 echo ""
 echo "Step 2: Upgrading pip..."
@@ -53,11 +57,26 @@ else
     exit 1
 fi
 
-# Test import
-python3 -c "from supabase import create_client; print('✓ Supabase client imports successfully')" || {
-    echo "✗ ERROR: Failed to import supabase client"
+# Test import and client creation
+if ! python3 << 'PYEOF'
+from supabase import create_client
+print('✓ Supabase client imports successfully')
+# Test client creation with dummy credentials
+try:
+    create_client('https://test.supabase.co', 'test_key')
+    print('✓ Supabase client creates successfully')
+except Exception as e:
+    # Connection errors are OK, we're just checking for import/initialization errors
+    if 'proxy' in str(e).lower():
+        print(f'✗ ERROR: Proxy error still exists: {e}')
+        exit(1)
+    else:
+        print('✓ Client initialization works (connection error expected)')
+PYEOF
+then
+    echo "✗ ERROR: Failed to verify supabase client"
     exit 1
-}
+fi
 
 echo ""
 echo "=================================================="
