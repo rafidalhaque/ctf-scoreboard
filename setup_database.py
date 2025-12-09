@@ -15,7 +15,7 @@ def read_schema():
     """Read the schema.sql file"""
     schema_path = os.path.join(os.path.dirname(__file__), 'schema.sql')
     try:
-        with open(schema_path, 'r') as f:
+        with open(schema_path, 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         print(f"Error: schema.sql not found at {schema_path}")
