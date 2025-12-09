@@ -1,0 +1,128 @@
+from flask import Flask, render_template, jsonify
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+import logging
+import atexit
+from datetime import datetime
+
+from config import Config
+from database import Database
+from ctfd_client import CTFdClient
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Initialize Flask app
+app = Flask(__name__)
+app.config.from_object(Config)
+
+# Initialize database and CTFd client
+db = Database()
+ctfd_client = CTFdClient()
+
+# Global variable to store last update time
+last_update_time = None
+
+def update_scoreboard():
+    """Fetch scoreboard data from CTFd API and update database"""
+    global last_update_time
+    try:
+        logger.info("Starting scoreboard update...")
+        
+        # Fetch scoreboard data from CTFd
+        scoreboard_data = ctfd_client.get_scoreboard(count=Config.TOP_TEAMS_COUNT)
+        
+        # Upsert data into database
+        db.upsert_scoreboard(scoreboard_data)
+        
+        last_update_time = datetime.now()
+        logger.info(f"Scoreboard updated successfully at {last_update_time}")
+        
+    except Exception as e:
+        logger.error(f"Error updating scoreboard: {e}")
+
+@app.route('/')
+def index():
+    """Main scoreboard page"""
+    try:
+        # Get scoreboard data from database
+        scoreboard = db.get_scoreboard(limit=Config.TOP_TEAMS_COUNT)
+        
+        return render_template(
+            'index.html',
+            event_name=Config.CTFD_EVENT_NAME,
+            scoreboard=scoreboard,
+            refresh_interval=Config.REFRESH_INTERVAL,
+            last_update=last_update_time
+        )
+    except Exception as e:
+        logger.error(f"Error rendering index page: {e}")
+        return render_template('error.html', error=str(e)), 500
+
+@app.route('/api/scoreboard')
+def api_scoreboard():
+    """API endpoint to get scoreboard data as JSON"""
+    try:
+        scoreboard = db.get_scoreboard(limit=Config.TOP_TEAMS_COUNT)
+        return jsonify({
+            'success': True,
+            'data': scoreboard,
+            'last_update': last_update_time.isoformat() if last_update_time else None
+        })
+    except Exception as e:
+        logger.error(f"Error in API scoreboard endpoint: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/health')
+def health():
+    """Health check endpoint"""
+    return jsonify({
+        'status': 'healthy',
+        'last_update': last_update_time.isoformat() if last_update_time else None
+    })
+
+def init_scheduler():
+    """Initialize the background scheduler for periodic updates"""
+    scheduler = BackgroundScheduler()
+    
+    # Schedule the update_scoreboard function
+    trigger = IntervalTrigger(seconds=Config.REFRESH_INTERVAL)
+    scheduler.add_job(
+        func=update_scoreboard,
+        trigger=trigger,
+        id='update_scoreboard',
+        name='Update scoreboard from CTFd API',
+        replace_existing=True
+    )
+    
+    scheduler.start()
+    logger.info(f"Scheduler started with interval: {Config.REFRESH_INTERVAL} seconds")
+    
+    # Shut down the scheduler when exiting the app
+    atexit.register(lambda: scheduler.shutdown())
+    
+    # Run initial update
+    update_scoreboard()
+
+if __name__ == '__main__':
+    try:
+        # Validate configuration
+        Config.validate()
+        
+        # Initialize scheduler
+        init_scheduler()
+        
+        # Run Flask app
+        logger.info(f"Starting Flask app on {Config.HOST}:{Config.PORT}")
+        app.run(host=Config.HOST, port=Config.PORT, debug=(Config.ENV == 'development'))
+        
+    except Exception as e:
+        logger.error(f"Failed to start application: {e}")
+        raise
