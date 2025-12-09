@@ -20,17 +20,24 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Initialize database and CTFd client
-db = Database()
-ctfd_client = CTFdClient()
-
-# Global variable to store last update time
+# Global variables
+db = None
+ctfd_client = None
 last_update_time = None
+
+def init_clients():
+    """Initialize database and CTFd client"""
+    global db, ctfd_client
+    if db is None:
+        db = Database()
+    if ctfd_client is None:
+        ctfd_client = CTFdClient()
 
 def update_scoreboard():
     """Fetch scoreboard data from CTFd API and update database"""
     global last_update_time
     try:
+        init_clients()
         logger.info("Starting scoreboard update...")
         
         # Fetch scoreboard data from CTFd
@@ -49,6 +56,7 @@ def update_scoreboard():
 def index():
     """Main scoreboard page"""
     try:
+        init_clients()
         # Get scoreboard data from database
         scoreboard = db.get_scoreboard(limit=Config.TOP_TEAMS_COUNT)
         
@@ -67,6 +75,7 @@ def index():
 def api_scoreboard():
     """API endpoint to get scoreboard data as JSON"""
     try:
+        init_clients()
         scoreboard = db.get_scoreboard(limit=Config.TOP_TEAMS_COUNT)
         return jsonify({
             'success': True,
@@ -115,6 +124,9 @@ if __name__ == '__main__':
     try:
         # Validate configuration
         Config.validate()
+        
+        # Initialize clients
+        init_clients()
         
         # Initialize scheduler
         init_scheduler()
