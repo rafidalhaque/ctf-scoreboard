@@ -6,6 +6,35 @@
 
 {% block content %}
 <div class="fade-in">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="stats shadow bg-base-100">
+            <div class="stat">
+                <div class="stat-figure text-primary">
+                    <i class="fas fa-users text-3xl"></i>
+                </div>
+                <div class="stat-title">Total Teams</div>
+                <div class="stat-value text-primary">{{ scoreboard|length if scoreboard else 0 }}</div>
+            </div>
+        </div>
+        
+        <div class="stats shadow bg-base-100">
+            <div class="stat">
+                <div class="stat-figure text-accent">
+                    <i class="fas fa-crown text-3xl"></i>
+                </div>
+                <div class="stat-title">Leader</div>
+                <div class="stat-value text-accent">
+                    {% if scoreboard and scoreboard|length > 0 %}
+                        {{ scoreboard[0].team_name[:10] }}{% if scoreboard[0].team_name|length > 10 %}...{% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Header Section -->
     <div class="text-center mb-8">
         <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">
@@ -20,12 +49,6 @@
             Last updated: {{ last_update.strftime('%Y-%m-%d %H:%M:%S') }}
         </div>
         {% endif %}
-    </div>
-
-    <!-- Auto-refresh indicator -->
-    <div class="alert alert-info shadow-lg mb-6">
-        <i class="fas fa-sync-alt"></i>
-        <span>Scoreboard auto-refreshes every {{ refresh_interval }} seconds</span>
     </div>
 
     <!-- Scoreboard Table -->
@@ -97,45 +120,6 @@
                 <p class="text-base-content/50">The scoreboard is currently empty. Check back soon!</p>
             </div>
             {% endif %}
-        </div>
-    </div>
-
-    <!-- Stats Cards (Optional) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-        <div class="stats shadow bg-base-100">
-            <div class="stat">
-                <div class="stat-figure text-primary">
-                    <i class="fas fa-users text-3xl"></i>
-                </div>
-                <div class="stat-title">Total Teams</div>
-                <div class="stat-value text-primary">{{ scoreboard|length if scoreboard else 0 }}</div>
-            </div>
-        </div>
-        
-        <div class="stats shadow bg-base-100">
-            <div class="stat">
-                <div class="stat-figure text-secondary">
-                    <i class="fas fa-sync text-3xl"></i>
-                </div>
-                <div class="stat-title">Refresh Rate</div>
-                <div class="stat-value text-secondary">{{ refresh_interval }}s</div>
-            </div>
-        </div>
-        
-        <div class="stats shadow bg-base-100">
-            <div class="stat">
-                <div class="stat-figure text-accent">
-                    <i class="fas fa-crown text-3xl"></i>
-                </div>
-                <div class="stat-title">Leader</div>
-                <div class="stat-value text-accent">
-                    {% if scoreboard and scoreboard|length > 0 %}
-                        {{ scoreboard[0].team_name[:10] }}{% if scoreboard[0].team_name|length > 10 %}...{% endif %}
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </div>
-            </div>
         </div>
     </div>
 </div>

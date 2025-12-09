@@ -38,30 +38,32 @@
     </style>
 </head>
 <body class="bg-base-200 min-h-screen">
-    <!-- Navbar -->
-    <div class="navbar bg-base-100 shadow-lg sticky top-0 z-50">
-        <div class="flex-1">
-            <a class="btn btn-ghost text-xl">
-                <i class="fas fa-trophy text-primary"></i>
-                <span class="ml-2">CTF Championship 2024</span>
-            </a>
-        </div>
-        <div class="flex-none">
-            <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-                    <i class="fas fa-ellipsis-v"></i>
-                </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="/health"><i class="fas fa-heart-pulse"></i> Health</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
         <div class="fade-in">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="stats shadow bg-base-100">
+                    <div class="stat">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-users text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Total Teams</div>
+                        <div class="stat-value text-primary">10</div>
+                    </div>
+                </div>
+                
+                <div class="stats shadow bg-base-100">
+                    <div class="stat">
+                        <div class="stat-figure text-accent">
+                            <i class="fas fa-crown text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Leader</div>
+                        <div class="stat-value text-accent">CyberHawks</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Header Section -->
             <div class="text-center mb-8">
                 <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">
@@ -74,12 +76,6 @@
                     <i class="fas fa-clock mr-1"></i>
                     Last updated: 2024-12-09 07:30:00
                 </div>
-            </div>
-
-            <!-- Auto-refresh indicator -->
-            <div class="alert alert-info shadow-lg mb-6">
-                <i class="fas fa-sync-alt"></i>
-                <span>Scoreboard auto-refreshes every 60 seconds</span>
             </div>
 
             <!-- Scoreboard Table -->
@@ -360,39 +356,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                <div class="stats shadow bg-base-100">
-                    <div class="stat">
-                        <div class="stat-figure text-primary">
-                            <i class="fas fa-users text-3xl"></i>
-                        </div>
-                        <div class="stat-title">Total Teams</div>
-                        <div class="stat-value text-primary">10</div>
-                    </div>
-                </div>
-                
-                <div class="stats shadow bg-base-100">
-                    <div class="stat">
-                        <div class="stat-figure text-secondary">
-                            <i class="fas fa-sync text-3xl"></i>
-                        </div>
-                        <div class="stat-title">Refresh Rate</div>
-                        <div class="stat-value text-secondary">60s</div>
-                    </div>
-                </div>
-                
-                <div class="stats shadow bg-base-100">
-                    <div class="stat">
-                        <div class="stat-figure text-accent">
-                            <i class="fas fa-crown text-3xl"></i>
-                        </div>
-                        <div class="stat-title">Leader</div>
-                        <div class="stat-value text-accent">CyberHawks</div>
                     </div>
                 </div>
             </div>
