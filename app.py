@@ -74,9 +74,9 @@ def index():
     """Main scoreboard page with countdown support"""
     try:
         # Check if CTF has started
-        if not Config.is_ctf_started():
+        start_time = Config.get_ctf_start_time()
+        if start_time is not None and not Config.is_ctf_started():
             # Show countdown page
-            start_time = Config.get_ctf_start_time()
             return render_template(
                 'countdown.html',
                 event_name=Config.CTFD_EVENT_NAME,

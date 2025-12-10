@@ -139,6 +139,8 @@ The application supports an optional countdown landing page that displays before
    ```env
    CTF_START_TIME=2025-12-31 23:59:59
    ```
+   
+   **Note:** Time is interpreted in the server's local timezone. For production deployments, ensure your server timezone is properly configured (e.g., set `TZ` environment variable).
 
 2. When users visit the site before this time, they'll see:
    - A full-page countdown timer showing days, hours, minutes, and seconds
