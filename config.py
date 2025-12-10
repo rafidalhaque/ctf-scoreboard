@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -26,6 +27,27 @@ class Config:
     
     # Display Configuration
     TOP_TEAMS_COUNT = int(os.getenv('TOP_TEAMS_COUNT', '10'))
+    
+    # CTF Start Time Configuration
+    CTF_START_TIME = os.getenv('CTF_START_TIME')
+    
+    @classmethod
+    def get_ctf_start_time(cls):
+        """Parse and return CTF start time as datetime object"""
+        if not cls.CTF_START_TIME:
+            return None
+        try:
+            return datetime.strptime(cls.CTF_START_TIME, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return None
+    
+    @classmethod
+    def is_ctf_started(cls):
+        """Check if CTF has started"""
+        start_time = cls.get_ctf_start_time()
+        if start_time is None:
+            return True  # If no start time is set, assume CTF is active
+        return datetime.now() >= start_time
     
     @classmethod
     def validate(cls):
