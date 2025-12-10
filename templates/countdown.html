@@ -67,15 +67,17 @@
 <script>
     // Set the target date/time from server
     const targetDate = new Date({{ start_time_iso | tojson }}).getTime();
+    let countdownInterval;
     
     // Update the countdown every second
     function updateCountdown() {
         const now = new Date().getTime();
         const distance = targetDate - now;
         
-        // If countdown is finished, reload the page to show scoreboard
+        // If countdown is finished, redirect to show scoreboard
         if (distance < 0) {
-            location.reload();
+            clearInterval(countdownInterval);
+            window.location.href = '/';
             return;
         }
         
@@ -95,7 +97,12 @@
     // Initial update
     updateCountdown();
     
-    // Update every second
-    setInterval(updateCountdown, 1000);
+    // Update every second and store interval ID
+    countdownInterval = setInterval(updateCountdown, 1000);
+    
+    // Clean up interval when page unloads
+    window.addEventListener('beforeunload', function() {
+        clearInterval(countdownInterval);
+    });
 </script>
 {% endblock %}
