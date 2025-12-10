@@ -71,8 +71,20 @@ def update_scoreboard():
 
 @app.route('/')
 def index():
-    """Main scoreboard page"""
+    """Main scoreboard page with countdown support"""
     try:
+        # Check if CTF has started
+        start_time = Config.get_ctf_start_time()
+        if start_time is not None and not Config.is_ctf_started():
+            # Show countdown page
+            return render_template(
+                'countdown.html',
+                event_name=Config.CTFD_EVENT_NAME,
+                start_time=start_time.strftime('%Y-%m-%d %H:%M:%S'),
+                start_time_iso=start_time.isoformat()
+            )
+        
+        # CTF has started, show scoreboard
         init_clients()
         # Get scoreboard data from database
         scoreboard = db.get_scoreboard(limit=Config.TOP_TEAMS_COUNT)

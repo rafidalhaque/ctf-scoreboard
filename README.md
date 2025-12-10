@@ -5,6 +5,7 @@ A real-time public scoreboard for CTFd competitions built with Python Flask, Tai
 ## Features
 
 - 🏆 **Real-time Updates**: Automatically fetches and displays CTFd scoreboard data at configurable intervals
+- ⏱️ **Countdown Landing Page**: Display a countdown timer before the CTF starts, automatically switching to the scoreboard when the competition begins
 - 📱 **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - 🎨 **Modern UI**: Built with Tailwind CSS and DaisyUI for a beautiful, accessible interface
 - 🔄 **Auto-refresh**: Page automatically reloads to show the latest standings
@@ -76,6 +77,11 @@ The scoreboard features:
    
    # Optional: Number of top teams to display
    TOP_TEAMS_COUNT=10
+   
+   # Optional: CTF Start Time for countdown page
+   # Format: YYYY-MM-DD HH:MM:SS (24-hour format)
+   # If not set or time has passed, scoreboard will be shown directly
+   CTF_START_TIME=2025-12-31 00:00:00
    ```
 
 ## Configuration
@@ -95,6 +101,7 @@ The scoreboard features:
 | `SUPABASE_URL` | Supabase project URL | Yes | - |
 | `SUPABASE_KEY` | Supabase anon/public key | Yes | - |
 | `TOP_TEAMS_COUNT` | Number of top teams to display | No | 10 |
+| `CTF_START_TIME` | CTF start time in format `YYYY-MM-DD HH:MM:SS` (24-hour). Shows countdown page before this time | No | None (scoreboard always shown) |
 
 ### Getting CTFd API Key
 
@@ -124,9 +131,29 @@ The application will:
 3. Launch the Flask web server
 4. Be accessible at `http://localhost:5000` (or your configured host/port)
 
+### Countdown Landing Page
+
+The application supports an optional countdown landing page that displays before the CTF starts:
+
+1. Set the `CTF_START_TIME` environment variable in your `.env` file:
+   ```env
+   CTF_START_TIME=2025-12-31 23:59:59
+   ```
+   
+   **Note:** Time is interpreted in the server's local timezone. For production deployments, ensure your server timezone is properly configured (e.g., set `TZ` environment variable).
+
+2. When users visit the site before this time, they'll see:
+   - A full-page countdown timer showing days, hours, minutes, and seconds
+   - The event name and start time
+   - An automatic redirect to the scoreboard when the countdown reaches zero
+
+3. Once the start time is reached, the page automatically shows the regular scoreboard
+
+4. If `CTF_START_TIME` is not set or is empty, the scoreboard is always displayed
+
 ### API Endpoints
 
-- `GET /` - Main scoreboard page (HTML)
+- `GET /` - Main page (countdown or scoreboard depending on `CTF_START_TIME`)
 - `GET /api/scoreboard` - Scoreboard data as JSON
 - `GET /health` - Health check endpoint
 

@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event_name }} - Countdown{% endblock %}
+
+{% block content %}
+<div class="fade-in min-h-screen flex items-center justify-center">
+    <div class="text-center">
+        <!-- Event Name -->
+        <h1 class="text-5xl md:text-7xl font-bold text-primary mb-8 animate-pulse">
+            <i class="fas fa-flag-checkered"></i> {{ event_name }}
+        </h1>
+        
+        <!-- Subtitle -->
+        <p class="text-2xl md:text-3xl text-base-content/80 mb-12">
+            The competition is about to begin!
+        </p>
+        
+        <!-- Countdown Timer -->
+        <div class="grid grid-flow-col gap-5 text-center auto-cols-max justify-center mb-12">
+            <div class="flex flex-col p-2 bg-primary rounded-box text-primary-content">
+                <span class="countdown font-mono text-5xl md:text-7xl">
+                    <span id="days" style="--value:0;"></span>
+                </span>
+                <span class="text-sm md:text-base">days</span>
+            </div>
+            <div class="flex flex-col p-2 bg-primary rounded-box text-primary-content">
+                <span class="countdown font-mono text-5xl md:text-7xl">
+                    <span id="hours" style="--value:0;"></span>
+                </span>
+                <span class="text-sm md:text-base">hours</span>
+            </div>
+            <div class="flex flex-col p-2 bg-primary rounded-box text-primary-content">
+                <span class="countdown font-mono text-5xl md:text-7xl">
+                    <span id="minutes" style="--value:0;"></span>
+                </span>
+                <span class="text-sm md:text-base">min</span>
+            </div>
+            <div class="flex flex-col p-2 bg-primary rounded-box text-primary-content">
+                <span class="countdown font-mono text-5xl md:text-7xl">
+                    <span id="seconds" style="--value:0;"></span>
+                </span>
+                <span class="text-sm md:text-base">sec</span>
+            </div>
+        </div>
+        
+        <!-- Start Time Display -->
+        <div class="alert alert-info shadow-lg max-w-2xl mx-auto">
+            <div>
+                <i class="fas fa-clock text-2xl"></i>
+                <div>
+                    <h3 class="font-bold">Competition Starts</h3>
+                    <div class="text-sm" id="start-time-display">{{ start_time }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading animation -->
+        <div class="mt-12">
+            <div class="loading loading-dots loading-lg text-primary"></div>
+            <p class="text-base-content/60 mt-4">Preparing the battlefield...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Set the target date/time from server
+    const targetDate = new Date({{ start_time_iso | tojson }}).getTime();
+    let countdownInterval;
+    
+    // Update the countdown every second
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        
+        // If countdown is finished, redirect to show scoreboard
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            window.location.href = '/';
+            return;
+        }
+        
+        // Calculate time components
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Update the countdown display
+        document.getElementById("days").style.setProperty('--value', days);
+        document.getElementById("hours").style.setProperty('--value', hours);
+        document.getElementById("minutes").style.setProperty('--value', minutes);
+        document.getElementById("seconds").style.setProperty('--value', seconds);
+    }
+    
+    // Initial update
+    updateCountdown();
+    
+    // Update every second and store interval ID
+    countdownInterval = setInterval(updateCountdown, 1000);
+    
+    // Clean up interval when page unloads
+    window.addEventListener('beforeunload', function() {
+        clearInterval(countdownInterval);
+    });
+</script>
+{% endblock %}
