@@ -249,9 +249,9 @@ class TestFlaskAPIEndpoints:
         assert data['success'] is False
         assert 'error' in data
     
-    @patch('app.Config.is_ctf_started')
     @patch('app.db')
-    def test_index_endpoint_scoreboard(self, mock_db, mock_is_started, client):
+    @patch('app.Config.is_ctf_started')
+    def test_index_endpoint_scoreboard(self, mock_is_started, mock_db, client):
         """Test / endpoint when CTF has started"""
         mock_is_started.return_value = True
         mock_db.get_scoreboard.return_value = [
@@ -264,9 +264,9 @@ class TestFlaskAPIEndpoints:
         # Check that response contains scoreboard content (not countdown)
         assert b'Team Alpha' in response.data or b'scoreboard' in response.data.lower()
     
-    @patch('app.Config.get_ctf_start_time')
     @patch('app.Config.is_ctf_started')
-    def test_index_endpoint_countdown(self, mock_is_started, mock_get_start_time, client):
+    @patch('app.Config.get_ctf_start_time')
+    def test_index_endpoint_countdown(self, mock_get_start_time, mock_is_started, client):
         """Test / endpoint when CTF has not started yet"""
         from datetime import datetime, timedelta
         

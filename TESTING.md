@@ -185,7 +185,7 @@ Tests use the following mock environment variables:
 
 ```python
 os.environ['CTFD_API_URL'] = 'https://test.ctfd.io/api/v1'
-os.environ['CTFD_API_KEY'] = 'test_api_key'
+os.environ['CTFD_API_KEY'] = 'test_api_key_12345'
 os.environ['SUPABASE_URL'] = 'https://test.supabase.co'
 os.environ['SUPABASE_KEY'] = 'test_supabase_key'
 os.environ['FLASK_SECRET_KEY'] = 'test_secret'
