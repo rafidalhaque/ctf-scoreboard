@@ -6,19 +6,19 @@
 <div class="hero min-h-[60vh]">
     <div class="hero-content text-center">
         <div class="max-w-md">
-            <i class="fas fa-exclamation-triangle text-8xl text-error mb-4"></i>
-            <h1 class="text-5xl font-bold">Oops!</h1>
-            <p class="py-6 text-lg">
+            <i class="fas fa-exclamation-triangle text-8xl text-warning mb-4"></i>
+            <h1 class="text-5xl font-bold text-hero-gold">Oops!</h1>
+            <p class="py-6 text-lg text-accent-ink">
                 Something went wrong while loading the scoreboard.
             </p>
             {% if error %}
-            <div class="alert alert-error">
+            <div class="alert bg-warning text-space-900">
                 <i class="fas fa-bug"></i>
                 <span>{{ error | e }}</span>
             </div>
             {% endif %}
             <div class="mt-6">
-                <a href="/" class="btn btn-primary">
+                <a href="/" class="btn bg-accent text-space-900 hover:bg-accent-2">
                     <i class="fas fa-home mr-2"></i>
                     Go Back Home
                 </a>

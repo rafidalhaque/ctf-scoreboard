@@ -1,18 +1,70 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CTF Scoreboard{% endblock %}</title>
     
-    <!-- Tailwind CSS and DaisyUI from CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS from CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config with Custom Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        bengali: ['Siyam Rupali', 'SiyamRupali', 'sans-serif']
+                    },
+                    colors: {
+                        'space-900': '#070c14',
+                        'space-800': '#0b1220',
+                        'space-700': '#0f1a2b',
+                        'space-600': '#13233a',
+                        'accent': '#28d7ff',
+                        'accent-2': '#4fc6de',
+                        'accent-ink': '#b8ecff',
+                        'highlight': '#6ef3d6',
+                        'warning': '#ffda6b',
+                        'hero-gold': '#f8b803'
+                    },
+                    screens: {
+                        'xs': '475px'
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        @theme {
+            --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+                'Segoe UI Symbol', 'Noto Color Emoji';
+            --font-bengali: 'Siyam Rupali', 'SiyamRupali', sans-serif;
+            /* Poster-inspired palette (space blues + cyan/teal accents) */
+            --color-space-900: #070c14; /* deepest space */
+            --color-space-800: #0b1220; /* poster background base */
+            --color-space-700: #0f1a2b;
+            --color-space-600: #13233a;
+            --color-accent: #28d7ff; /* cyan accent */
+            --color-accent-2: #4fc6de; /* lighter cyan */
+            --color-accent-ink: #b8ecff; /* subtle ink for text glow */
+            --color-highlight: #6ef3d6; /* teal secondary */
+            --color-warning: #ffda6b; /* for badges if needed */
+            --sf-hero-gold: #f8b803; /* hero title color */
+            /* Custom breakpoints */
+            --breakpoint-xs: 475px;
+        }
+
         /* Custom animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -23,9 +75,9 @@
             animation: fadeIn 0.5s ease-out;
         }
         
-        .trophy-gold { color: #FFD700; }
-        .trophy-silver { color: #C0C0C0; }
-        .trophy-bronze { color: #CD7F32; }
+        .trophy-gold { color: #f8b803; }
+        .trophy-silver { color: #4fc6de; }
+        .trophy-bronze { color: #6ef3d6; }
         
         /* Smooth transitions */
         .score-item {
@@ -39,16 +91,16 @@
     
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-base-200 min-h-screen">
+<body class="bg-space-900 min-h-screen text-accent-ink">
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="footer footer-center p-10 bg-base-100 text-base-content mt-auto">
+    <footer class="footer footer-center p-10 bg-space-800 text-accent-ink mt-auto">
         <aside>
-            <i class="fas fa-flag-checkered text-4xl text-primary"></i>
+            <i class="fas fa-flag-checkered text-4xl text-accent"></i>
             <p class="font-bold">
                 CTF Scoreboard
             </p> 

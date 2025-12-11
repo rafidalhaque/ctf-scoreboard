@@ -1,18 +1,70 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CTF Scoreboard - Demo</title>
     
-    <!-- Tailwind CSS and DaisyUI from CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS from CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config with Custom Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        bengali: ['Siyam Rupali', 'SiyamRupali', 'sans-serif']
+                    },
+                    colors: {
+                        'space-900': '#070c14',
+                        'space-800': '#0b1220',
+                        'space-700': '#0f1a2b',
+                        'space-600': '#13233a',
+                        'accent': '#28d7ff',
+                        'accent-2': '#4fc6de',
+                        'accent-ink': '#b8ecff',
+                        'highlight': '#6ef3d6',
+                        'warning': '#ffda6b',
+                        'hero-gold': '#f8b803'
+                    },
+                    screens: {
+                        'xs': '475px'
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        @theme {
+            --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+                'Segoe UI Symbol', 'Noto Color Emoji';
+            --font-bengali: 'Siyam Rupali', 'SiyamRupali', sans-serif;
+            /* Poster-inspired palette (space blues + cyan/teal accents) */
+            --color-space-900: #070c14; /* deepest space */
+            --color-space-800: #0b1220; /* poster background base */
+            --color-space-700: #0f1a2b;
+            --color-space-600: #13233a;
+            --color-accent: #28d7ff; /* cyan accent */
+            --color-accent-2: #4fc6de; /* lighter cyan */
+            --color-accent-ink: #b8ecff; /* subtle ink for text glow */
+            --color-highlight: #6ef3d6; /* teal secondary */
+            --color-warning: #ffda6b; /* for badges if needed */
+            --sf-hero-gold: #f8b803; /* hero title color */
+            /* Custom breakpoints */
+            --breakpoint-xs: 475px;
+        }
+
         /* Custom animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -23,9 +75,9 @@
             animation: fadeIn 0.5s ease-out;
         }
         
-        .trophy-gold { color: #FFD700; }
-        .trophy-silver { color: #C0C0C0; }
-        .trophy-bronze { color: #CD7F32; }
+        .trophy-gold { color: #f8b803; }
+        .trophy-silver { color: #4fc6de; }
+        .trophy-bronze { color: #6ef3d6; }
         
         /* Smooth transitions */
         .score-item {
@@ -37,54 +89,54 @@
         }
     </style>
 </head>
-<body class="bg-base-200 min-h-screen">
+<body class="bg-space-900 min-h-screen text-accent-ink">
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
         <div class="fade-in">
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="stats shadow bg-base-100">
+                <div class="stats shadow bg-space-800">
                     <div class="stat">
-                        <div class="stat-figure text-primary">
+                        <div class="stat-figure text-accent">
                             <i class="fas fa-users text-3xl"></i>
                         </div>
-                        <div class="stat-title">Total Teams</div>
-                        <div class="stat-value text-primary">10</div>
+                        <div class="stat-title text-accent-ink">Total Teams</div>
+                        <div class="stat-value text-accent">10</div>
                     </div>
                 </div>
                 
-                <div class="stats shadow bg-base-100">
+                <div class="stats shadow bg-space-800">
                     <div class="stat">
-                        <div class="stat-figure text-accent">
+                        <div class="stat-figure text-highlight">
                             <i class="fas fa-crown text-3xl"></i>
                         </div>
-                        <div class="stat-title">Leader</div>
-                        <div class="stat-value text-accent">CyberHawks</div>
+                        <div class="stat-title text-accent-ink">Leader</div>
+                        <div class="stat-value text-highlight">CyberHawks</div>
                     </div>
                 </div>
             </div>
 
             <!-- Header Section -->
             <div class="text-center mb-8">
-                <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-hero-gold mb-4">
                     <i class="fas fa-trophy"></i> CTF Championship 2024
                 </h1>
-                <p class="text-lg text-base-content/70">
+                <p class="text-lg text-accent-ink">
                     Live Scoreboard
                 </p>
-                <div class="badge badge-info mt-2">
+                <div class="badge bg-accent-2 text-space-900 mt-2">
                     <i class="fas fa-clock mr-1"></i>
                     Last updated: 2024-12-09 07:30:00
                 </div>
             </div>
 
             <!-- Scoreboard Table -->
-            <div class="card bg-base-100 shadow-xl">
+            <div class="card bg-space-800 shadow-xl">
                 <div class="card-body p-0">
                     <div class="overflow-x-auto">
-                        <table class="table table-zebra w-full">
+                        <table class="table w-full">
                             <!-- Head -->
-                            <thead class="bg-primary text-primary-content">
+                            <thead class="bg-space-700 text-accent">
                                 <tr>
                                     <th class="text-center w-20">Rank</th>
                                     <th>Team</th>
@@ -93,7 +145,7 @@
                             </thead>
                             <tbody>
                                 <!-- First Place -->
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <div class="flex items-center justify-center">
                                             <i class="fas fa-trophy trophy-gold text-2xl"></i>
@@ -103,18 +155,18 @@
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">C</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">CyberHawks</div>
-                                                <div class="text-sm opacity-50">Team ID: 101</div>
+                                                <div class="font-bold text-lg text-accent-ink">CyberHawks</div>
+                                                <div class="text-sm text-accent-2">Team ID: 101</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             4850 pts
                                         </div>
@@ -122,7 +174,7 @@
                                 </tr>
                                 
                                 <!-- Second Place -->
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <div class="flex items-center justify-center">
                                             <i class="fas fa-trophy trophy-silver text-2xl"></i>
@@ -132,18 +184,18 @@
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">H</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">HackMasters</div>
-                                                <div class="text-sm opacity-50">Team ID: 102</div>
+                                                <div class="font-bold text-lg text-accent-ink">HackMasters</div>
+                                                <div class="text-sm text-accent-2">Team ID: 102</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             4620 pts
                                         </div>
@@ -151,7 +203,7 @@
                                 </tr>
                                 
                                 <!-- Third Place -->
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <div class="flex items-center justify-center">
                                             <i class="fas fa-trophy trophy-bronze text-2xl"></i>
@@ -161,18 +213,18 @@
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">S</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">SecureSquad</div>
-                                                <div class="text-sm opacity-50">Team ID: 103</div>
+                                                <div class="font-bold text-lg text-accent-ink">SecureSquad</div>
+                                                <div class="text-sm text-accent-2">Team ID: 103</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             4100 pts
                                         </div>
@@ -180,175 +232,175 @@
                                 </tr>
                                 
                                 <!-- Other teams -->
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <span class="text-lg">4</span>
                                     </td>
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">B</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">ByteBandits</div>
-                                                <div class="text-sm opacity-50">Team ID: 104</div>
+                                                <div class="font-bold text-lg text-accent-ink">ByteBandits</div>
+                                                <div class="text-sm text-accent-2">Team ID: 104</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             3850 pts
                                         </div>
                                     </td>
                                 </tr>
                                 
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <span class="text-lg">5</span>
                                     </td>
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">N</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">NullPointers</div>
-                                                <div class="text-sm opacity-50">Team ID: 105</div>
+                                                <div class="font-bold text-lg text-accent-ink">NullPointers</div>
+                                                <div class="text-sm text-accent-2">Team ID: 105</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             3500 pts
                                         </div>
                                     </td>
                                 </tr>
                                 
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <span class="text-lg">6</span>
                                     </td>
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">R</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">RootRunners</div>
-                                                <div class="text-sm opacity-50">Team ID: 106</div>
+                                                <div class="font-bold text-lg text-accent-ink">RootRunners</div>
+                                                <div class="text-sm text-accent-2">Team ID: 106</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             3200 pts
                                         </div>
                                     </td>
                                 </tr>
                                 
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <span class="text-lg">7</span>
                                     </td>
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">D</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">DataBreakers</div>
-                                                <div class="text-sm opacity-50">Team ID: 107</div>
+                                                <div class="font-bold text-lg text-accent-ink">DataBreakers</div>
+                                                <div class="text-sm text-accent-2">Team ID: 107</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             2900 pts
                                         </div>
                                     </td>
                                 </tr>
                                 
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <span class="text-lg">8</span>
                                     </td>
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">P</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">PixelPwners</div>
-                                                <div class="text-sm opacity-50">Team ID: 108</div>
+                                                <div class="font-bold text-lg text-accent-ink">PixelPwners</div>
+                                                <div class="text-sm text-accent-2">Team ID: 108</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             2650 pts
                                         </div>
                                     </td>
                                 </tr>
                                 
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <span class="text-lg">9</span>
                                     </td>
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">Q</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">QuantumCrack</div>
-                                                <div class="text-sm opacity-50">Team ID: 109</div>
+                                                <div class="font-bold text-lg text-accent-ink">QuantumCrack</div>
+                                                <div class="text-sm text-accent-2">Team ID: 109</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             2400 pts
                                         </div>
                                     </td>
                                 </tr>
                                 
-                                <tr class="score-item hover:bg-base-200">
+                                <tr class="score-item hover:bg-space-700 border-b border-space-700">
                                     <td class="text-center font-bold">
                                         <span class="text-lg">10</span>
                                     </td>
                                     <td>
                                         <div class="flex items-center space-x-3">
                                             <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                                <div class="bg-space-600 text-accent rounded-full w-12">
                                                     <span class="text-xl">E</span>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="font-bold text-lg">ExploitExperts</div>
-                                                <div class="text-sm opacity-50">Team ID: 110</div>
+                                                <div class="font-bold text-lg text-accent-ink">ExploitExperts</div>
+                                                <div class="text-sm text-accent-2">Team ID: 110</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <div class="badge badge-lg badge-primary">
+                                        <div class="badge badge-lg bg-accent text-space-900">
                                             <i class="fas fa-star mr-1"></i>
                                             2100 pts
                                         </div>
@@ -363,9 +415,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer footer-center p-10 bg-base-100 text-base-content mt-12">
+    <footer class="footer footer-center p-10 bg-space-800 text-accent-ink mt-12">
         <aside>
-            <i class="fas fa-flag-checkered text-4xl text-primary"></i>
+            <i class="fas fa-flag-checkered text-4xl text-accent"></i>
             <p class="font-bold">
                 CTF Scoreboard
             </p> 
