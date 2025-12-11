@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS scoreboard (
     id BIGSERIAL PRIMARY KEY,
     rank INTEGER NOT NULL,
-    team_id INTEGER UNIQUE NOT NULL,
+    team_id BIGINT UNIQUE NOT NULL,
     team_name TEXT NOT NULL,
     score INTEGER DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW(),
