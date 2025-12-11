@@ -1,6 +1,7 @@
 from supabase import create_client, Client
 from config import Config
 import logging
+import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ class Database:
         Upsert scoreboard data into the database
         
         Args:
-            scoreboard_data: List of team/user score dictionaries
+            scoreboard_data: List of team/user score dictionaries or strings
         """
         try:
             if not scoreboard_data:
@@ -25,13 +26,31 @@ class Database:
             # Transform data for database
             records = []
             for idx, entry in enumerate(scoreboard_data, 1):
-                record = {
-                    'rank': idx,
-                    'team_id': entry.get('account_id'),
-                    'team_name': entry.get('name'),
-                    'score': entry.get('score', 0),
-                    'updated_at': 'now()'
-                }
+                # Handle both dict and string entries
+                if isinstance(entry, dict):
+                    # Full team data with details
+                    record = {
+                        'rank': idx,
+                        'team_id': entry.get('account_id', idx),
+                        'team_name': entry.get('name', f'Team {idx}'),
+                        'score': entry.get('score', 0),
+                        'updated_at': 'now()'
+                    }
+                elif isinstance(entry, str):
+                    # String entry (just team name)
+                    # Use hash of team name to generate unique team_id to avoid collisions
+                    team_id_hash = int(hashlib.sha256(entry.encode()).hexdigest()[:8], 16)
+                    record = {
+                        'rank': idx,
+                        'team_id': team_id_hash,
+                        'team_name': entry,
+                        'score': 0,
+                        'updated_at': 'now()'
+                    }
+                else:
+                    logger.warning(f"Unexpected entry type at index {idx}: {type(entry)}")
+                    continue
+                
                 records.append(record)
             
             # Upsert data (insert or update if team_id exists)
