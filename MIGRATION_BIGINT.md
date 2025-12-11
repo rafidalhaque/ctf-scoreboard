@@ -1,9 +1,15 @@
 # Migration Guide: team_id INTEGER to BIGINT
 
 ## Issue
-The `team_id` column was defined as `INTEGER` which has a maximum value of 2,147,483,647. This caused errors when:
-- Hash values generated from team names exceeded this limit
-- CTFd `account_id` values exceeded this limit
+The `team_id` column was defined as `INTEGER` which has a maximum value of 2,147,483,647. 
+
+The application generates `team_id` values in two ways:
+1. **From CTFd API**: Uses the `account_id` field directly from the API response (database.py line 34)
+2. **From string entries**: Generates a hash using SHA256 and takes first 8 hex characters (database.py line 42)
+
+This caused errors when:
+- Hash values generated from team names exceeded the INTEGER limit (e.g., 3564330554)
+- CTFd `account_id` values from the API exceeded the INTEGER limit
 
 Error message:
 ```

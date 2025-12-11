@@ -43,6 +43,9 @@ def test_hash_generation():
     
     overflow_count = 0
     for team_name in sample_teams:
+        # This matches the hash generation logic in database.py line 42
+        # Using first 8 hex characters (32 bits) to generate a unique team_id
+        # This is the same logic that caused the overflow issue
         team_id_hash = int(hashlib.sha256(team_name.encode()).hexdigest()[:8], 16)
         exceeds_int32 = team_id_hash > max_int32
         
