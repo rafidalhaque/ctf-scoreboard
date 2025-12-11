@@ -296,9 +296,48 @@ pip install -r requirements.txt --upgrade
 
 See [UPGRADE.md](UPGRADE.md) for detailed upgrade instructions.
 
+## Testing
+
+The project includes a comprehensive test suite covering API integration, database operations, and end-to-end flows.
+
+### Running Tests
+
+```bash
+# Quick run - all tests
+./run_tests.sh
+
+# Or use pytest directly
+pytest
+
+# Run specific test suites
+./run_tests.sh api          # CTFd API tests only
+./run_tests.sh database     # Database tests only
+./run_tests.sh integration  # Integration tests only
+
+# Quick test (no verbose output)
+./run_tests.sh quick
+
+# Generate coverage report
+./run_tests.sh coverage
+```
+
+### Test Suite Overview
+
+- **72 tests** covering all critical functionality
+- **24 tests** for CTFd API client
+- **27 tests** for database operations
+- **21 tests** for integration scenarios
+
+See [TESTING.md](TESTING.md) for detailed testing documentation and [TEST_SUMMARY.md](TEST_SUMMARY.md) for test metrics.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+Before submitting:
+1. Run the test suite: `./run_tests.sh`
+2. Ensure all tests pass
+3. Add tests for new features
 
 ## License
 
