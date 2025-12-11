@@ -5,6 +5,12 @@
 {% block content %}
 <div class="fade-in min-h-screen flex items-center justify-center">
     <div class="text-center">
+        <!-- Header Images -->
+        <div class="flex justify-center items-center gap-8 mb-8">
+            <img src="{{ url_for('static', filename='image/Al-Khwarizmi science fest heading-01.png') }}" alt="Al-Khwarizmi Science Fest" class="h-24 md:h-32" width="128">
+            <img src="{{ url_for('static', filename='image/Shibir Logo-01.png') }}" alt="Shibir Logo" class="h-24 md:h-32" width="128">
+        </div>
+
         <!-- Event Name -->
         <h1 class="text-5xl md:text-7xl font-bold text-hero-gold mb-8 animate-pulse">
             <i class="fas fa-flag-checkered"></i> {{ event_name }}
