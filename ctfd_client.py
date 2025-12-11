@@ -45,6 +45,18 @@ class CTFdClient:
             else:
                 scoreboard_data = data
             
+            # Convert dictionary with rank keys to list if needed
+            if isinstance(scoreboard_data, dict):
+                # Sort by rank (key) and extract values
+                scoreboard_list = []
+                for rank_key in sorted(scoreboard_data.keys(), key=lambda x: int(x)):
+                    team_data = scoreboard_data[rank_key]
+                    # Ensure the rank is included in the team data
+                    if isinstance(team_data, dict):
+                        team_data['rank'] = int(rank_key)
+                    scoreboard_list.append(team_data)
+                scoreboard_data = scoreboard_list
+            
             logger.info(f"Successfully fetched {len(scoreboard_data)} scoreboard entries")
             return scoreboard_data
             
