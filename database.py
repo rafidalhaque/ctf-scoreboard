@@ -25,30 +25,38 @@ class Database:
             
             # Transform data for database
             records = []
-            for idx, entry in enumerate(scoreboard_data, 1):
+            for entry in scoreboard_data:
                 # Handle both dict and string entries
                 if isinstance(entry, dict):
                     # Full team data with details
+                    # Use the rank from the entry if available, otherwise use id or enumerate
+                    rank = entry.get('rank')
+                    if rank is None:
+                        rank = len(records) + 1
+                    
+                    # Get team_id - try 'id' first, then 'account_id'
+                    team_id = entry.get('id') or entry.get('account_id')
+                    if team_id is None:
+                        team_id = rank
+                    
                     record = {
-                        'rank': idx,
-                        'team_id': entry.get('account_id', idx),
-                        'team_name': entry.get('name', f'Team {idx}'),
-                        'score': entry.get('score', 0),
-                        'updated_at': 'now()'
+                        'rank': rank,
+                        'team_id': team_id,
+                        'team_name': entry.get('name', f'Team {team_id}'),
+                        'score': entry.get('score', 0)
                     }
                 elif isinstance(entry, str):
                     # String entry (just team name)
                     # Use hash of team name to generate unique team_id to avoid collisions
                     team_id_hash = int(hashlib.sha256(entry.encode()).hexdigest()[:8], 16)
                     record = {
-                        'rank': idx,
+                        'rank': len(records) + 1,
                         'team_id': team_id_hash,
                         'team_name': entry,
-                        'score': 0,
-                        'updated_at': 'now()'
+                        'score': 0
                     }
                 else:
-                    logger.warning(f"Unexpected entry type at index {idx}: {type(entry)}")
+                    logger.warning(f"Unexpected entry type: {type(entry)}")
                     continue
                 
                 records.append(record)
