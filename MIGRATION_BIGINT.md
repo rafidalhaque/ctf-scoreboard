@@ -60,8 +60,31 @@ ORDER BY ordinal_position;
 
 Expected output should show `team_id` as `bigint`.
 
+### Data Refresh (IMPORTANT!)
+After migrating the schema, you need to refresh the scoreboard data because:
+- Failed upserts during the integer overflow period may have left stale or corrupted data
+- The database needs fresh data from CTFd API with the correct column type
+
+**Option A: Using the provided script (Recommended)**
+```bash
+python fix_data.py
+```
+
+**Option B: Manual SQL**
+```sql
+-- Clear existing data
+DELETE FROM scoreboard;
+
+-- Restart your application to fetch fresh data
+-- The scheduler will automatically populate the table
+```
+
+After refreshing the data, verify that:
+1. Team names display as strings (not numbers)
+2. Scores show actual values (not all zeros)
+
 ### Testing
-After migration, restart your application and monitor the logs. The error should no longer occur:
+After migration and data refresh, monitor the logs. The error should no longer occur:
 
 ```bash
 # Monitor application logs
@@ -71,8 +94,36 @@ tail -f /path/to/your/logs
 docker logs -f <container_name>
 ```
 
+## Troubleshooting
+
+### Issue: Team names show as numbers instead of strings
+**Symptom**: The scoreboard displays numerical values in the team name column.
+
+**Cause**: This indicates data corruption or stale data from the period when upserts were failing.
+
+**Solution**: Clear the database and let the system fetch fresh data:
+```bash
+python fix_data.py
+```
+
+### Issue: All scores show 0
+**Symptom**: All teams have a score of 0 even though they should have points.
+
+**Cause**: Similar to above - stale or corrupted data from failed upserts.
+
+**Solution**: Clear the database and refresh data as described above.
+
+### Issue: Error persists after migration
+**Symptom**: The integer overflow error still occurs after running the ALTER TABLE command.
+
+**Possible causes**:
+1. The ALTER TABLE didn't complete successfully - verify with `\d scoreboard` in psql
+2. You're running an old version of the application - ensure you've pulled latest code
+3. Connection pooling issues - restart your application completely
+
 ## Notes
 - The migration from INTEGER to BIGINT is safe and does not lose data
 - All existing values in the INTEGER range are valid BIGINT values
 - No application code changes are required - Python handles both integer sizes transparently
 - Indexes on `team_id` will be automatically updated during the ALTER TABLE operation
+- **Important**: After migration, you MUST refresh the data using `fix_data.py` to ensure clean data
