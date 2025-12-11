@@ -1,6 +1,7 @@
 from supabase import create_client, Client
 from config import Config
 import logging
+import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -37,9 +38,11 @@ class Database:
                     }
                 elif isinstance(entry, str):
                     # String entry (just team name)
+                    # Use hash of team name to generate unique team_id to avoid collisions
+                    team_id_hash = int(hashlib.sha256(entry.encode()).hexdigest()[:8], 16)
                     record = {
                         'rank': idx,
-                        'team_id': idx,
+                        'team_id': team_id_hash,
                         'team_name': entry,
                         'score': 0,
                         'updated_at': 'now()'
