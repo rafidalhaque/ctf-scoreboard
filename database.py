@@ -43,8 +43,7 @@ class Database:
                         'rank': rank,
                         'team_id': team_id,
                         'team_name': entry.get('name', f'Team {team_id}'),
-                        'score': entry.get('score', 0),
-                        'updated_at': 'now()'
+                        'score': entry.get('score', 0)
                     }
                 elif isinstance(entry, str):
                     # String entry (just team name)
@@ -54,8 +53,7 @@ class Database:
                         'rank': len(records) + 1,
                         'team_id': team_id_hash,
                         'team_name': entry,
-                        'score': 0,
-                        'updated_at': 'now()'
+                        'score': 0
                     }
                 else:
                     logger.warning(f"Unexpected entry type: {type(entry)}")
