@@ -51,7 +51,7 @@ def main():
             print("✓ Successfully cleared existing data")
         except Exception as e:
             print(f"✗ Error clearing data: {e}")
-            print("This might be expected if the table is already empty.")
+            print("You may continue if this is just an empty table.")
         
         print("\n" + "=" * 60)
         print("Step 2: Fetching fresh data from CTFd API...")
@@ -63,9 +63,10 @@ def main():
             print(f"✓ Successfully fetched {len(scoreboard_data)} records from API")
             
             # Display sample data
+            SAMPLE_SIZE = 3
             if scoreboard_data:
                 print("\nSample of fetched data:")
-                for i, entry in enumerate(scoreboard_data[:3], 1):
+                for i, entry in enumerate(scoreboard_data[:SAMPLE_SIZE], 1):
                     if isinstance(entry, dict):
                         print(f"  {i}. {entry.get('name', 'Unknown')} - {entry.get('score', 0)} points")
                     else:

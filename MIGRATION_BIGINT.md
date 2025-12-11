@@ -76,7 +76,9 @@ python fix_data.py
 DELETE FROM scoreboard;
 
 -- Restart your application to fetch fresh data
--- The scheduler will automatically populate the table
+-- The background scheduler (APScheduler) will automatically 
+-- fetch data from CTFd API and populate the table within the 
+-- configured refresh interval (default: 60 seconds)
 ```
 
 After refreshing the data, verify that:
