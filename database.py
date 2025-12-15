@@ -13,8 +13,9 @@ class Database:
     
     def upsert_scoreboard(self, scoreboard_data):
         """
-        Upsert scoreboard data into the database
-        
+        Insert fresh scoreboard data into the database
+        Clears existing data and inserts new rankings
+
         Args:
             scoreboard_data: List of team/user score dictionaries or strings
         """
@@ -61,13 +62,14 @@ class Database:
                 
                 records.append(record)
             
-            # Upsert data (insert or update if team_id exists)
-            response = self.client.table('scoreboard').upsert(
-                records,
-                on_conflict='team_id'
-            ).execute()
-            
-            logger.info(f"Successfully upserted {len(records)} scoreboard records")
+            # Clear existing data and insert fresh rankings
+            # This ensures ranks are always up-to-date and team_id remains unique
+            self.client.table('scoreboard').delete().neq('team_id', 0).execute()
+
+            # Insert fresh data
+            response = self.client.table('scoreboard').insert(records).execute()
+
+            logger.info(f"Successfully inserted {len(records)} fresh scoreboard records")
             return response
             
         except Exception as e:
