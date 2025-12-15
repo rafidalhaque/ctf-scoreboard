@@ -1,6 +1,6 @@
 {
   "swagger": "2.0",
-  "basePath": "/api/v1",
+  "basePath": "area51.shibirsec.qzz.io/api/v1",
   "paths": {
     "/awards": {
       "get": {

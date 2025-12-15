@@ -119,6 +119,40 @@ def api_scoreboard():
             'error': str(e)
         }), 500
 
+@app.route('/team/<int:team_id>')
+def team_profile(team_id):
+    """Team profile page showing team details and solves"""
+    try:
+        init_clients()
+
+        # Fetch team details from CTFd API
+        team_details = ctfd_client.get_team_details(team_id)
+
+        # Fetch team solves
+        team_solves = ctfd_client.get_team_solves(team_id)
+
+        # Get team's rank from scoreboard
+        scoreboard = db.get_scoreboard(limit=Config.TOP_TEAMS_COUNT)
+        team_rank = None
+        team_score = None
+        for entry in scoreboard:
+            if entry['team_id'] == team_id:
+                team_rank = entry['rank']
+                team_score = entry['score']
+                break
+
+        return render_template(
+            'team_profile.html',
+            event_name=Config.CTFD_EVENT_NAME,
+            team=team_details,
+            solves=team_solves,
+            rank=team_rank,
+            score=team_score
+        )
+    except Exception as e:
+        logger.error(f"Error rendering team profile page: {e}")
+        return render_template('error.html', error=f"Failed to load team profile: {str(e)}"), 500
+
 @app.route('/health')
 def health():
     """Health check endpoint"""

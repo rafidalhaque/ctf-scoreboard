@@ -95,7 +95,10 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="font-bold text-lg text-accent-ink">{{ team.team_name }}</div>
+                                        <a href="/team/{{ team.team_id }}" class="font-bold text-lg text-accent-ink hover:text-cyan-400 transition-colors duration-200">
+                                            {{ team.team_name }}
+                                            <i class="fas fa-external-link-alt text-xs ml-1 opacity-50"></i>
+                                        </a>
                                         <div class="text-sm text-accent-2">Team ID: {{ team.team_id }}</div>
                                     </div>
                                 </div>

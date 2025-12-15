@@ -67,6 +67,76 @@ class CTFdClient:
             logger.error(f"Unexpected error fetching scoreboard: {e}")
             raise
     
+    def get_team_details(self, team_id):
+        """
+        Fetch detailed information about a specific team
+
+        Args:
+            team_id: The ID of the team
+
+        Returns:
+            Dictionary containing team details
+        """
+        try:
+            endpoint = f"{self.api_url}/teams/{team_id}"
+            logger.info(f"Fetching team details from: {endpoint}")
+
+            response = requests.get(endpoint, headers=self.headers, timeout=30)
+            response.raise_for_status()
+
+            data = response.json()
+
+            # CTFd API returns data in 'data' field
+            if 'data' in data:
+                team_data = data['data']
+            else:
+                team_data = data
+
+            logger.info(f"Successfully fetched details for team {team_id}")
+            return team_data
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Error fetching team details from CTFd API: {e}")
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected error fetching team details: {e}")
+            raise
+
+    def get_team_solves(self, team_id):
+        """
+        Fetch the list of challenges solved by a specific team
+
+        Args:
+            team_id: The ID of the team
+
+        Returns:
+            List of solved challenges
+        """
+        try:
+            endpoint = f"{self.api_url}/teams/{team_id}/solves"
+            logger.info(f"Fetching team solves from: {endpoint}")
+
+            response = requests.get(endpoint, headers=self.headers, timeout=30)
+            response.raise_for_status()
+
+            data = response.json()
+
+            # CTFd API returns data in 'data' field
+            if 'data' in data:
+                solves_data = data['data']
+            else:
+                solves_data = data
+
+            logger.info(f"Successfully fetched {len(solves_data) if isinstance(solves_data, list) else 0} solves for team {team_id}")
+            return solves_data if isinstance(solves_data, list) else []
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Error fetching team solves from CTFd API: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error fetching team solves: {e}")
+            return []
+
     def test_connection(self):
         """Test connection to CTFd API"""
         try:
