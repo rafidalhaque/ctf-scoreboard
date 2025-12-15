@@ -11,9 +11,9 @@
         <div class="stats shadow bg-space-800">
             <div class="stat">
                 <div class="stat-figure text-accent">
-                    <i class="fas fa-users text-3xl"></i>
+                    <i class="fas fa-users text-2xl"></i>
                 </div>
-                <div class="stat-title text-accent-ink">Total Teams</div>
+                <div class="stat-title text-accent-ink">Total Teams in Scoreboard</div>
                 <div class="stat-value text-accent">{{ scoreboard|length if scoreboard else 0 }}</div>
             </div>
         </div>
@@ -21,16 +21,10 @@
         <div class="stats shadow bg-space-800">
             <div class="stat">
                 <div class="stat-figure text-highlight">
-                    <i class="fas fa-crown text-3xl"></i>
+                    <i class="fas fa-users text-2xl"></i>
                 </div>
-                <div class="stat-title text-accent-ink">Leader</div>
-                <div class="stat-value text-highlight">
-                    {% if scoreboard and scoreboard|length > 0 %}
-                        {{ scoreboard[0].team_name[:10] }}{% if scoreboard[0].team_name|length > 10 %}...{% endif %}
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </div>
+                <div class="stat-title text-accent-ink">Total Teams</div>
+                <div class="stat-value text-highlight">268</div>
             </div>
         </div>
     </div>
