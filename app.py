@@ -123,6 +123,11 @@ def api_scoreboard():
 def team_profile(team_id):
     """Team profile page showing team details and solves"""
     try:
+        # Check if freeze mode is enabled
+        if Config.FREEZE_MODE:
+            logger.info(f"Team profile access denied in freeze mode for team {team_id}")
+            return render_template('error.html', error="Team profiles are not available in freeze mode"), 503
+        
         init_clients()
 
         # Fetch team details from CTFd API
@@ -163,6 +168,12 @@ def health():
 
 def init_scheduler():
     """Initialize the background scheduler for periodic updates"""
+    # Check if freeze mode is enabled
+    if Config.FREEZE_MODE:
+        logger.info("Freeze mode is enabled - scheduler will not be started")
+        logger.info("Scoreboard will serve data from database only")
+        return
+    
     scheduler = BackgroundScheduler()
     
     # Schedule the update_scoreboard function
