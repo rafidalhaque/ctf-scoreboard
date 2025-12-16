@@ -11,6 +11,8 @@ class Config:
     CTFD_EVENT_NAME = os.getenv('CTFD_EVENT_NAME', 'CTF Event')
     CTFD_API_URL = os.getenv('CTFD_API_URL')
     CTFD_API_KEY = os.getenv('CTFD_API_KEY')
+    # Custom User-Agent for all outbound CTFd API requests
+    CTFD_USER_AGENT = os.getenv('CTFD_USER_AGENT', 'ctf-scoreboard/1.0')
     
     # Refresh interval in seconds
     REFRESH_INTERVAL = int(os.getenv('REFRESH_INTERVAL', '60'))

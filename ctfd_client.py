@@ -12,7 +12,8 @@ class CTFdClient:
         self.api_key = Config.CTFD_API_KEY
         self.headers = {
             'Authorization': f'Token {self.api_key}',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'User-Agent': Config.CTFD_USER_AGENT,
         }
     
     def get_scoreboard(self, count=None):

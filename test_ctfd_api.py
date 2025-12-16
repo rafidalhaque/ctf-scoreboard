@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Set mock environment variables
 os.environ['CTFD_API_URL'] = 'https://test.ctfd.io/api/v1'
 os.environ['CTFD_API_KEY'] = 'test_api_key_12345'
+os.environ['CTFD_USER_AGENT'] = 'test-user-agent/1.0'
 os.environ['SUPABASE_URL'] = 'https://test.supabase.co'
 os.environ['SUPABASE_KEY'] = 'test_supabase_key'
 os.environ['FLASK_SECRET_KEY'] = 'test_secret'
@@ -35,6 +36,7 @@ class TestCTFdClientInitialization:
         assert 'Authorization' in client.headers
         assert client.headers['Authorization'] == 'Token test_api_key_12345'
         assert client.headers['Content-Type'] == 'application/json'
+        assert client.headers['User-Agent'] == 'test-user-agent/1.0'
     
     def test_client_headers_format(self):
         """Test that headers are properly formatted"""
@@ -42,9 +44,10 @@ class TestCTFdClientInitialization:
         
         # Verify headers structure
         assert isinstance(client.headers, dict)
-        assert len(client.headers) == 2
+        assert len(client.headers) == 3
         assert 'Authorization' in client.headers
         assert 'Content-Type' in client.headers
+        assert 'User-Agent' in client.headers
 
 
 class TestGetScoreboard:
@@ -421,6 +424,7 @@ class TestAPIEndpointBuilding:
             assert 'Authorization' in request_headers
             assert request_headers['Authorization'] == 'Token test_api_key_12345'
             assert request_headers['Content-Type'] == 'application/json'
+            assert request_headers['User-Agent'] == 'test-user-agent/1.0'
 
 
 class TestDataFormats:
