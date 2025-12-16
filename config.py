@@ -34,6 +34,10 @@ class Config:
     # Note: CTF_START_TIME uses server's local timezone. Ensure server timezone is configured correctly.
     CTF_START_TIME = os.getenv('CTF_START_TIME')
     
+    # Freeze Mode Configuration
+    # When enabled, scoreboard stops fetching from CTFd API and serves from database only
+    FREEZE_MODE = os.getenv('FREEZE_MODE', 'false').lower() in ('true', '1', 'yes')
+    
     @classmethod
     def get_ctf_start_time(cls):
         """

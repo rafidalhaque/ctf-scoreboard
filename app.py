@@ -163,6 +163,12 @@ def health():
 
 def init_scheduler():
     """Initialize the background scheduler for periodic updates"""
+    # Check if freeze mode is enabled
+    if Config.FREEZE_MODE:
+        logger.info("Freeze mode is enabled - scheduler will not be started")
+        logger.info("Scoreboard will serve data from database only")
+        return
+    
     scheduler = BackgroundScheduler()
     
     # Schedule the update_scoreboard function

@@ -491,5 +491,162 @@ class TestUpdateScoreboardFunction:
         update_scoreboard()
 
 
+class TestFreezeMode:
+    """Test freeze mode functionality"""
+    
+    def test_freeze_mode_disabled_by_default(self):
+        """Test that freeze mode is disabled by default"""
+        # Save current value
+        old_value = os.environ.get('FREEZE_MODE')
+        
+        try:
+            # Clear freeze mode env var
+            if 'FREEZE_MODE' in os.environ:
+                del os.environ['FREEZE_MODE']
+            
+            # Reload config
+            import importlib
+            import config
+            importlib.reload(config)
+            from config import Config
+            
+            assert Config.FREEZE_MODE == False
+        finally:
+            # Restore old value
+            if old_value is not None:
+                os.environ['FREEZE_MODE'] = old_value
+            elif 'FREEZE_MODE' in os.environ:
+                del os.environ['FREEZE_MODE']
+            # Reload to restore
+            import importlib
+            import config
+            importlib.reload(config)
+    
+    def test_freeze_mode_enabled_with_true(self):
+        """Test that freeze mode can be enabled"""
+        # Save current value
+        old_value = os.environ.get('FREEZE_MODE')
+        
+        try:
+            # Set freeze mode to true
+            os.environ['FREEZE_MODE'] = 'true'
+            
+            # Reload config
+            import importlib
+            import config
+            importlib.reload(config)
+            from config import Config
+            
+            assert Config.FREEZE_MODE == True
+        finally:
+            # Restore old value
+            if old_value is not None:
+                os.environ['FREEZE_MODE'] = old_value
+            elif 'FREEZE_MODE' in os.environ:
+                del os.environ['FREEZE_MODE']
+            # Reload to restore
+            import importlib
+            import config
+            importlib.reload(config)
+    
+    def test_freeze_mode_enabled_with_variations(self):
+        """Test that freeze mode accepts various true values"""
+        # Save current value
+        old_value = os.environ.get('FREEZE_MODE')
+        
+        true_values = ['true', 'True', 'TRUE', '1', 'yes', 'Yes', 'YES']
+        
+        for value in true_values:
+            try:
+                os.environ['FREEZE_MODE'] = value
+                
+                # Reload config
+                import importlib
+                import config
+                importlib.reload(config)
+                from config import Config
+                
+                assert Config.FREEZE_MODE == True, f"Failed for value: {value}"
+            finally:
+                # Restore old value
+                if old_value is not None:
+                    os.environ['FREEZE_MODE'] = old_value
+                elif 'FREEZE_MODE' in os.environ:
+                    del os.environ['FREEZE_MODE']
+                # Reload to restore
+                import importlib
+                import config
+                importlib.reload(config)
+    
+    @patch('app.Config')
+    @patch('app.BackgroundScheduler')
+    @patch('app.update_scoreboard')
+    def test_scheduler_not_started_in_freeze_mode(self, mock_update, mock_scheduler_class, mock_config):
+        """Test that scheduler is not started when freeze mode is enabled"""
+        from app import init_scheduler
+        
+        # Mock Config to enable freeze mode
+        mock_config.FREEZE_MODE = True
+        mock_config.REFRESH_INTERVAL = 60
+        
+        # Initialize scheduler
+        init_scheduler()
+        
+        # Scheduler should not be created
+        mock_scheduler_class.assert_not_called()
+        mock_update.assert_not_called()
+    
+    @patch('app.Config')
+    @patch('app.BackgroundScheduler')
+    @patch('app.update_scoreboard')
+    def test_scheduler_started_when_freeze_mode_disabled(self, mock_update, mock_scheduler_class, mock_config):
+        """Test that scheduler is started when freeze mode is disabled"""
+        from app import init_scheduler
+        
+        # Mock Config to disable freeze mode
+        mock_config.FREEZE_MODE = False
+        mock_config.REFRESH_INTERVAL = 60
+        
+        # Mock scheduler instance
+        mock_scheduler = MagicMock()
+        mock_scheduler_class.return_value = mock_scheduler
+        
+        # Initialize scheduler
+        init_scheduler()
+        
+        # Scheduler should be created and started
+        mock_scheduler_class.assert_called_once()
+        mock_scheduler.add_job.assert_called_once()
+        mock_scheduler.start.assert_called_once()
+        mock_update.assert_called_once()
+    
+    def test_scoreboard_serves_from_database_in_freeze_mode(self, client, mock_supabase_client):
+        """Test that scoreboard endpoint serves data from database in freeze mode"""
+        # Mock database data
+        mock_table = MagicMock()
+        mock_query = MagicMock()
+        mock_execute = MagicMock()
+        
+        test_data = [
+            {'rank': 1, 'team_id': 1, 'team_name': 'Team Alpha', 'score': 1000},
+            {'rank': 2, 'team_id': 2, 'team_name': 'Team Beta', 'score': 800},
+        ]
+        
+        mock_execute.execute.return_value = MagicMock(data=test_data)
+        mock_query.limit.return_value = mock_execute
+        mock_query.order.return_value = mock_query
+        mock_table.select.return_value = mock_query
+        mock_supabase_client.table.return_value = mock_table
+        
+        # Make request to scoreboard endpoint
+        response = client.get('/api/scoreboard')
+        
+        # Should return data from database
+        assert response.status_code == 200
+        data = response.get_json()
+        assert data['success'] == True
+        assert len(data['data']) == 2
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

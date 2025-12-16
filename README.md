@@ -82,6 +82,9 @@ The scoreboard features:
    # Format: YYYY-MM-DD HH:MM:SS (24-hour format)
    # If not set or time has passed, scoreboard will be shown directly
    CTF_START_TIME=2025-12-31 00:00:00
+   
+   # Optional: Freeze Mode - stops fetching from CTFd API and serves from database only
+   FREEZE_MODE=false
    ```
 
 ## Configuration
@@ -102,6 +105,7 @@ The scoreboard features:
 | `SUPABASE_KEY` | Supabase anon/public key | Yes | - |
 | `TOP_TEAMS_COUNT` | Number of top teams to display | No | 10 |
 | `CTF_START_TIME` | CTF start time in format `YYYY-MM-DD HH:MM:SS` (24-hour). Shows countdown page before this time | No | None (scoreboard always shown) |
+| `FREEZE_MODE` | When set to `true`, stops fetching from CTFd API and serves from database only | No | false |
 
 ### Getting CTFd API Key
 
@@ -150,6 +154,28 @@ The application supports an optional countdown landing page that displays before
 3. Once the start time is reached, the page automatically shows the regular scoreboard
 
 4. If `CTF_START_TIME` is not set or is empty, the scoreboard is always displayed
+
+### Freeze Mode
+
+The application supports freezing the scoreboard to prevent further updates from the CTFd API:
+
+1. Set the `FREEZE_MODE` environment variable to `true` in your `.env` file:
+   ```env
+   FREEZE_MODE=true
+   ```
+
+2. When freeze mode is enabled:
+   - The background scheduler will not start
+   - No data will be fetched from the CTFd API
+   - The scoreboard will continue to serve data from the database
+   - All existing data in the database remains accessible
+
+3. Use this feature when you want to freeze the standings, such as:
+   - At the end of a competition
+   - During a scoring dispute
+   - When you want to display historical results
+
+4. To resume live updates, set `FREEZE_MODE=false` and restart the application
 
 ### API Endpoints
 
