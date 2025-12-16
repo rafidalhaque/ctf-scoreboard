@@ -510,7 +510,7 @@ class TestFreezeMode:
             importlib.reload(config)
             from config import Config
             
-            assert Config.FREEZE_MODE == False
+            assert Config.FREEZE_MODE is False
         finally:
             # Restore old value
             if old_value is not None:
@@ -537,7 +537,7 @@ class TestFreezeMode:
             importlib.reload(config)
             from config import Config
             
-            assert Config.FREEZE_MODE == True
+            assert Config.FREEZE_MODE is True
         finally:
             # Restore old value
             if old_value is not None:
@@ -566,7 +566,7 @@ class TestFreezeMode:
                 importlib.reload(config)
                 from config import Config
                 
-                assert Config.FREEZE_MODE == True, f"Failed for value: {value}"
+                assert Config.FREEZE_MODE is True, f"Failed for value: {value}"
             finally:
                 # Restore old value
                 if old_value is not None:
@@ -644,8 +644,20 @@ class TestFreezeMode:
         # Should return data from database
         assert response.status_code == 200
         data = response.get_json()
-        assert data['success'] == True
+        assert data['success'] is True
         assert len(data['data']) == 2
+    
+    @patch('app.Config')
+    def test_team_profile_disabled_in_freeze_mode(self, mock_config, client):
+        """Test that team profile is disabled when freeze mode is enabled"""
+        # Mock Config to enable freeze mode
+        mock_config.FREEZE_MODE = True
+        
+        # Make request to team profile endpoint
+        response = client.get('/team/1')
+        
+        # Should return 503 error
+        assert response.status_code == 503
 
 
 if __name__ == '__main__':

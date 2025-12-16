@@ -169,6 +169,7 @@ The application supports freezing the scoreboard to prevent further updates from
    - No data will be fetched from the CTFd API
    - The scoreboard will continue to serve data from the database
    - All existing data in the database remains accessible
+   - Team profile pages will be disabled (return 503 error)
 
 3. Use this feature when you want to freeze the standings, such as:
    - At the end of a competition

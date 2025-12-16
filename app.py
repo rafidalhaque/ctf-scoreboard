@@ -123,6 +123,11 @@ def api_scoreboard():
 def team_profile(team_id):
     """Team profile page showing team details and solves"""
     try:
+        # Check if freeze mode is enabled
+        if Config.FREEZE_MODE:
+            logger.info(f"Team profile access denied in freeze mode for team {team_id}")
+            return render_template('error.html', error="Team profiles are not available in freeze mode"), 503
+        
         init_clients()
 
         # Fetch team details from CTFd API
